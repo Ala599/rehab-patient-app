@@ -1,0 +1,11 @@
+{
+  "name": "patient-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototype PWA patient : détection de pose et comptage de répétitions",
+  "scripts": {
+    "start": "npx serve .",
+    "test": "node --test"
+  }
+}

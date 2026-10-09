@@ -1,0 +1,25 @@
+{
+  "id": "elbow_flexion",
+  "name": "Flexion du coude (assis)",
+  "joint": "elbow",
+  "landmarks": {
+    "left": [11, 13, 15],
+    "right": [12, 14, 16]
+  },
+  "startAngle": 160,
+  "targetAngle": 60,
+  "tolerance": 10,
+  "targetReps": 10,
+  "minVisibility": 0.5,
+  "checks": [
+    { "id": "trunk_lean", "maxTiltDeg": 12, "message": "Restez droit sur la chaise" }
+  ],
+  "messages": {
+    "ready": "Pliez puis dépliez le coude",
+    "partial": "Pliez un peu plus",
+    "lowVisibility": "Je ne vous vois pas bien, reculez un peu",
+    "noPerson": "Placez-vous devant la caméra",
+    "done": "Série terminée, bravo"
+  },
+  "_note": "Valeurs d'exemple pour le développement. Les vraies valeurs sont définies et validées par le kiné ou le médecin."
+}
