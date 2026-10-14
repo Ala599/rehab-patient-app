@@ -3,8 +3,16 @@
   "name": "Flexion du coude (assis)",
   "joint": "elbow",
   "landmarks": {
-    "left": [11, 13, 15],
-    "right": [12, 14, 16]
+    "left": [
+      11,
+      13,
+      15
+    ],
+    "right": [
+      12,
+      14,
+      16
+    ]
   },
   "startAngle": 160,
   "targetAngle": 60,
@@ -12,14 +20,31 @@
   "targetReps": 10,
   "minVisibility": 0.5,
   "checks": [
-    { "id": "trunk_lean", "maxTiltDeg": 12, "message": "Restez droit sur la chaise" }
+    {
+      "id": "trunk_lean",
+      "maxTiltDeg": 12,
+      "message": "Restez droit sur la chaise"
+    }
   ],
   "messages": {
     "ready": "Pliez puis dépliez le coude",
     "partial": "Pliez un peu plus",
     "lowVisibility": "Je ne vous vois pas bien, reculez un peu",
     "noPerson": "Placez-vous devant la caméra",
-    "done": "Série terminée, bravo"
+    "done": "Série terminée, bravo",
+    "calibrationHealthy": "Côté sain : pliez et dépliez le coude le plus loin possible",
+    "calibrationAffected": "Côté atteint : pliez et dépliez le coude aussi loin que vous pouvez",
+    "calibrationHealthyHidden": "Je ne vois pas votre bras sain, reculez un peu",
+    "reviewReady": "Mesure terminée"
   },
-  "_note": "Valeurs d'exemple pour le développement. Les vraies valeurs sont définies et validées par le kiné ou le médecin."
+  "calibration": {
+    "cycles": 3,
+    "prominenceDeg": 12,
+    "minRomDeg": 15
+  },
+  "personalization": {
+    "targetFraction": 0.8
+  },
+  "smoothingAlpha": 0.7,
+  "_note": "Valeurs d'exemple pour le développement. Les vraies valeurs sont définies et validées par le kiné ou le médecin. Les paramètres de calibration (nombre de mouvements, variation minimale, fraction de l'amplitude visée) sont aussi à valider."
 }

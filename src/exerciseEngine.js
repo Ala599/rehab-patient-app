@@ -12,7 +12,14 @@ const HIPS = [23, 24];
 export class ExerciseEngine {
   constructor(config, side = "right") {
     this.config = config;
+    this.counting = true; // false pendant la calibration : on mesure sans compter de répétitions
     this.setSide(side);
+  }
+
+  // Remplace la fiche (par exemple après la calibration) et repart de zéro.
+  setConfig(config) {
+    this.config = config;
+    this.reset();
   }
 
   setSide(side) {
@@ -23,8 +30,11 @@ export class ExerciseEngine {
 
   reset() {
     this.counter = new RepCounter(this.config);
-    this.emaMain = new Ema(0.4);
-    this.emaOther = new Ema(0.4);
+    // Force du lissage : plus alpha est proche de 1, plus la mesure suit le mouvement de près
+    // (amplitude mieux mesurée) mais plus elle tremble. Voir le README.
+    const alpha = this.config.smoothingAlpha ?? 0.7;
+    this.emaMain = new Ema(alpha);
+    this.emaOther = new Ema(alpha);
     this.reps = 0;
     this.partialReps = 0;
   }
@@ -46,7 +56,7 @@ export class ExerciseEngine {
     const mainVisible = isVisible(main);
     if (mainVisible) {
       angleMain = this.emaMain.update(angleBetween(...main));
-      const event = this.counter.update(angleMain, tMs);
+      const event = this.counting ? this.counter.update(angleMain, tMs) : null;
       if (event) {
         events.push(event);
         if (event.type === "rep") this.reps += 1;

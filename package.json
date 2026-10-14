@@ -1,11 +1,12 @@
 {
-  "name": "patient-app",
+  "name": "rehome-patient-app",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Prototype PWA patient : détection de pose et comptage de répétitions",
+  "description": "ReHome : application patient (PWA) de rééducation à domicile",
   "scripts": {
     "start": "npx serve .",
-    "test": "node --test"
+    "test": "node --test",
+    "test:smoke": "sh tests/smoke/run.sh"
   }
 }

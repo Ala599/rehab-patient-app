@@ -10,6 +10,12 @@ export class SessionRecorder {
     this.startedAt = new Date();
     this.reps = [];
     this.partialReps = 0;
+    this.calibration = null;
+  }
+
+  // review = { healthy, affected, asymmetry, personalized } produit par la calibration
+  setCalibration(review) {
+    this.calibration = review;
   }
 
   addEvent(event) {
@@ -19,8 +25,16 @@ export class SessionRecorder {
 
   build() {
     const minAngles = this.reps.map((r) => r.minAngle);
+    const roms = this.reps.map((r) => r.rom);
     const durations = this.reps.map((r) => r.durationMs / 1000);
     const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
+    const avgRom = avg(roms);
+
+    // Écart entre l'amplitude moyenne des répétitions et l'amplitude du côté sain mesurée à la calibration.
+    const healthyRom = this.calibration?.healthy?.rom;
+    const seriesAsymmetryPercent =
+      avgRom != null && healthyRom > 0 ? Math.round(((healthyRom - avgRom) / healthyRom) * 100) : null;
+
     return {
       exerciseId: this.exerciseId,
       side: this.side,
@@ -30,7 +44,10 @@ export class SessionRecorder {
       partialReps: this.partialReps,
       bestMinAngle: minAngles.length ? round(Math.min(...minAngles)) : null,
       avgMinAngle: round(avg(minAngles)),
+      avgRom: round(avgRom),
       avgRepDurationSec: round(avg(durations)),
+      calibration: this.calibration,
+      seriesAsymmetryPercent,
     };
   }
 }

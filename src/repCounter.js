@@ -16,22 +16,27 @@ export class RepCounter {
   reset() {
     this.state = "unknown";
     this.minAngle = Infinity;
+    this.maxAngle = -Infinity;
     this.startedAt = 0;
     this.reachedTarget = false;
     this.count = 0;
     this.partialCount = 0;
   }
 
-  // Retourne null, ou un événement { type: "rep" | "partial", count, minAngle, durationMs }.
+  // Retourne null, ou un événement { type: "rep" | "partial", count, minAngle, maxAngle, rom, durationMs }.
   update(angle, tMs) {
     if (angle == null) return null;
 
     if (this.state === "unknown") {
-      if (angle >= this.extendedThreshold) this.state = "extended";
+      if (angle >= this.extendedThreshold) {
+        this.state = "extended";
+        this.maxAngle = angle;
+      }
       return null;
     }
 
     if (this.state === "extended") {
+      if (angle >= this.extendedThreshold) this.maxAngle = Math.max(this.maxAngle, angle);
       if (angle < this.extendedThreshold) {
         this.state = "moving";
         this.minAngle = angle;
@@ -48,9 +53,12 @@ export class RepCounter {
     if (angle >= this.extendedThreshold) {
       const event = {
         minAngle: this.minAngle,
+        maxAngle: this.maxAngle,
+        rom: this.maxAngle - this.minAngle,
         durationMs: tMs - this.startedAt,
       };
       this.state = "extended";
+      this.maxAngle = angle; // point de départ de la répétition suivante
       if (this.reachedTarget) {
         this.count += 1;
         return { type: "rep", count: this.count, ...event };
